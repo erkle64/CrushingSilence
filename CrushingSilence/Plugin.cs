@@ -6,7 +6,6 @@ using System;
 namespace CrushingSilence
 {
     [BepInPlugin(GUID, MODNAME, VERSION)]
-    [BepInDependency(Unfoundry.Plugin.GUID, BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BepInEx.IL2CPP.BasePlugin
     {
         public const string

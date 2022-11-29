@@ -72,12 +72,6 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Unfoundry\Unfoundry\Unfoundry.csproj">
-      <Project>{43ffcd1c-85a3-487d-9166-03c615684c15}</Project>
-      <Name>Unfoundry</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="Exists('$(FoundryPluginsPath)')">
     <PostBuildEvent>copy /Y $(TargetPath) $(FoundryPluginsPath)</PostBuildEvent>
