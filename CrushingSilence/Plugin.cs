@@ -12,7 +12,7 @@ namespace CrushingSilence
             MODNAME = "CrushingSilence",
             AUTHOR = "erkle64",
             GUID = "com." + AUTHOR + "." + MODNAME,
-            VERSION = "1.0.0";
+            VERSION = "1.1.0";
 
         public static BepInEx.Logging.ManualLogSource log;
         public Plugin()
@@ -38,28 +38,39 @@ namespace CrushingSilence
         [HarmonyPatch]
         public static class Patch
         {
-            private static bool silenceCurrentMachine = false;
-
-            [HarmonyPatch(typeof(CrusherGO), nameof(CrusherGO.machineUpdates))]
+            [HarmonyPatch(typeof(BuildableObjectTemplate), nameof(BuildableObjectTemplate.onLoad))]
             [HarmonyPrefix]
-            private static void CrusherGO_machineUpdates(CrusherGO __instance)
+            private static void BuildableObjectTemplate_onLoad(BuildableObjectTemplate __instance)
             {
-                silenceCurrentMachine = __instance.template.name.StartsWith("Crusher");
+                if (__instance.name.StartsWith("Crusher"))
+                {
+                    log.LogInfo((string)$"Silencing '{__instance.name}'");
+                    __instance.producer_audioClip_active = null;
+                }
             }
 
-            [HarmonyPatch(typeof(CrusherGO), nameof(CrusherGO.machineUpdates))]
-            [HarmonyPostfix]
-            private static void CrusherGO_machineUpdatesPostfix(CrusherGO __instance)
-            {
-                silenceCurrentMachine = false;
-            }
+            //private static bool silenceCurrentMachine = false;
 
-            [HarmonyPatch(typeof(AudioSourceFader), nameof(AudioSourceFader.renderUpdate), new Type[] { typeof(bool), typeof(bool) })]
-            [HarmonyPrefix]
-            private static void AudioSourceFader_renderUpdate(AudioSourceFader __instance, ref bool state, ref bool enableSound)
-            {
-                if (silenceCurrentMachine) enableSound = false;
-            }
+            //[HarmonyPatch(typeof(CrusherGO), nameof(CrusherGO.machineUpdates))]
+            //[HarmonyPrefix]
+            //private static void CrusherGO_machineUpdates(CrusherGO __instance)
+            //{
+            //    silenceCurrentMachine = true;
+            //}
+
+            //[HarmonyPatch(typeof(CrusherGO), nameof(CrusherGO.machineUpdates))]
+            //[HarmonyPostfix]
+            //private static void CrusherGO_machineUpdatesPostfix(CrusherGO __instance)
+            //{
+            //    silenceCurrentMachine = false;
+            //}
+
+            //[HarmonyPatch(typeof(AudioSourceFader), nameof(AudioSourceFader.renderUpdate), new Type[] { typeof(bool), typeof(bool) })]
+            //[HarmonyPrefix]
+            //private static void AudioSourceFader_renderUpdate(AudioSourceFader __instance, ref bool state, ref bool enableSound)
+            //{
+            //    if (silenceCurrentMachine) enableSound = false;
+            //}
         }
     }
 }
